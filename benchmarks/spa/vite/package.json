@@ -1,0 +1,6 @@
+{
+  "name": "@bench/spa-vite",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Vite SPA fixture — Track A benchmark target (Phase 2)"
+}

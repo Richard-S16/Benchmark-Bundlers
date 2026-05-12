@@ -1,0 +1,6 @@
+{
+  "name": "@bench/next-app",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Next.js app fixture — Track B benchmark target (Turbopack vs Webpack) (Phase 2)"
+}

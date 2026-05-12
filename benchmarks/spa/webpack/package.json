@@ -1,0 +1,6 @@
+{
+  "name": "@bench/spa-webpack",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Webpack 5 SPA fixture — Track A benchmark target (Phase 2)"
+}

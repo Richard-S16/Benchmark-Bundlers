@@ -1,0 +1,21 @@
+{
+  "name": "benchmark-bundlers",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Reproducible benchmark harness for Webpack, Vite, Rspack, and Turbopack",
+  "engines": {
+    "node": "22.x",
+    "pnpm": ">=9.15.0"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "bench:dev:spa": "node scripts/bench/run-dev-bench.mjs --track spa",
+    "bench:dev:next": "node scripts/bench/run-dev-bench.mjs --track next",
+    "bench:build:spa": "node scripts/bench/run-build-bench.mjs --track spa",
+    "bench:build:next": "node scripts/bench/run-build-bench.mjs --track next",
+    "bench:all": "pnpm bench:dev:spa && pnpm bench:build:spa && pnpm bench:dev:next && pnpm bench:build:next",
+    "bench:smoke": "node scripts/bench/run-dev-bench.mjs --smoke && node scripts/bench/run-build-bench.mjs --smoke",
+    "bench:smoke:spa": "node scripts/bench/run-dev-bench.mjs --track spa --smoke && node scripts/bench/run-build-bench.mjs --track spa --smoke",
+    "bench:smoke:next": "node scripts/bench/run-dev-bench.mjs --track next --smoke && node scripts/bench/run-build-bench.mjs --track next --smoke"
+  }
+}

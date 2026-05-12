@@ -1,0 +1,39 @@
+BENCHMARK-PLAN.md
+
+# Dependencies
+node_modules/
+
+# SPA build outputs
+benchmarks/spa/webpack/dist/
+benchmarks/spa/vite/dist/
+benchmarks/spa/rspack/dist/
+
+# Next.js build output — cleared by runners for cold runs
+benchmarks/next/app/.next/
+
+# Bundler dev/build caches — managed explicitly by benchmark runners
+# Webpack
+benchmarks/spa/webpack/node_modules/.cache/
+# Vite
+benchmarks/spa/vite/node_modules/.vite/
+# Rspack
+benchmarks/spa/rspack/node_modules/.cache/
+
+# Raw benchmark result JSON — uploaded as CI artifacts, not committed
+results/raw/*.json
+results/summary/*.json
+
+# pnpm virtual store (if materialised locally)
+.pnpm-store/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local

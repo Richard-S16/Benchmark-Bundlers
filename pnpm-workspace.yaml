@@ -1,0 +1,7 @@
+packages:
+  # Track A — React SPA (Webpack, Vite, Rspack share the same source graph)
+  - 'benchmarks/spa/webpack'
+  - 'benchmarks/spa/vite'
+  - 'benchmarks/spa/rspack'
+  # Track B — Next.js (Turbopack vs. Webpack, same app fixture)
+  - 'benchmarks/next/app'

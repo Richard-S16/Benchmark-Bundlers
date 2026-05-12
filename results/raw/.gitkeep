@@ -1,0 +1,2 @@
+# Raw benchmark JSON — uploaded as CI artifacts, not committed directly.
+# Format: results/raw/<tool>-<track>-<scenario>-<run-id>.json

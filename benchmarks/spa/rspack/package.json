@@ -1,0 +1,6 @@
+{
+  "name": "@bench/spa-rspack",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Rspack SPA fixture — Track A benchmark target (Phase 2)"
+}

@@ -68,4 +68,12 @@ export const TIMEOUTS = {
   build: 300_000,
 };
 
+export const HMR_SETTLE_MS = {
+  webpack: 0,
+  vite: 2000,
+  rspack: 0,
+  'next-turbopack': 0,
+  'next-webpack': 0,
+};
+
 export const CV_WARNING_THRESHOLD = 0.15;

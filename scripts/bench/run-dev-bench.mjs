@@ -11,7 +11,7 @@ import {
   writeResult,
   buildEnvMeta,
 } from './runner.mjs';
-import { ITERATIONS, MATRIX, READY_MARKERS, TIMEOUTS } from './config.mjs';
+import { ITERATIONS, MATRIX, READY_MARKERS, TIMEOUTS, HMR_SETTLE_MS } from './config.mjs';
 
 const { values: args } = parseArgs({
   options: {
@@ -115,6 +115,8 @@ for (const tool of tools) {
     });
 
     // --- HMR (reuse warm server) ---
+    const hmrSettle = HMR_SETTLE_MS[tool] ?? 0;
+    if (hmrSettle > 0) await new Promise((r) => setTimeout(r, hmrSettle));
     console.log('  [hmr] triggering edit...');
     const hmrStart = performance.now();
     const originalContent = await triggerHmrEdit(tool);

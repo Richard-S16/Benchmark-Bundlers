@@ -1,4 +1,5 @@
 packages:
+  - 'benchmarks/spa/shared-src'
   - 'benchmarks/spa/webpack'
   - 'benchmarks/spa/vite'
   - 'benchmarks/spa/rspack'

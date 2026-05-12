@@ -34,6 +34,10 @@ module.exports = (env, argv) => ({
       template: path.resolve(__dirname, '../shared-src/index.html'),
     }),
   ],
+  optimization: {
+    runtimeChunk: 'single',
+  },
+  performance: false,
   cache: {
     type: 'filesystem',
     cacheDirectory: path.resolve(__dirname, 'node_modules/.cache/webpack'),

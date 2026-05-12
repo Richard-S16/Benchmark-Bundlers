@@ -11,10 +11,21 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3002,
+    warmup: {
+      clientFiles: [
+        './src/main.tsx',
+        './src/App.tsx',
+        './src/components/*.tsx',
+        './src/pages/*.tsx',
+      ],
+    },
   },
   build: {
     outDir: path.resolve(__dirname, 'dist'),
     emptyOutDir: true,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
   cacheDir: path.resolve(__dirname, 'node_modules/.vite'),
 });

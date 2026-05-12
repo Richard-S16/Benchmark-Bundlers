@@ -2,7 +2,7 @@ import path from 'path';
 import { defineConfig } from '@rspack/cli';
 import { rspack } from '@rspack/core';
 
-export default defineConfig({
+export default defineConfig((env, argv) => ({
   entry: {
     main: path.resolve(__dirname, '../shared-src/src/main.tsx'),
   },
@@ -44,12 +44,15 @@ export default defineConfig({
       template: path.resolve(__dirname, '../shared-src/index.html'),
     }),
   ],
-  experiments: {
-    cache: {
-      type: 'persistent',
-      storage: {
-        directory: path.resolve(__dirname, 'node_modules/.cache/rspack'),
-      },
+  optimization: {
+    runtimeChunk: 'single',
+  },
+  performance: false,
+  cache: {
+    type: 'persistent',
+    storage: {
+      type: 'filesystem',
+      directory: path.resolve(__dirname, 'node_modules/.cache/rspack'),
     },
   },
   devServer: {
@@ -57,4 +60,5 @@ export default defineConfig({
     hot: true,
     static: path.resolve(__dirname, '../shared-src/public'),
   },
-});
+  devtool: argv.mode === 'production' ? false : 'eval-cheap-module-source-map',
+}));

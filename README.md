@@ -48,7 +48,8 @@ For Vite specifically, **server ready** and **first-page interactive** are recor
 
 ## Results
 
-> **Status — partial data.** Only Vite (Track A) has been run so far. Webpack, Rspack, and Next.js results are pending.
+> **Status — Track A complete (SPA tools). Track B (Next.js) pending.**
+> Full report: [`results/summary/report-2026-05-12T18-59-55.md`](results/summary/report-2026-05-12T18-59-55.md)
 
 ### Environment
 
@@ -59,26 +60,54 @@ For Vite specifically, **server ready** and **first-page interactive** are recor
 | CPUs | 14 |
 | Date | 2026-05-12 |
 
-### Track A — React SPA · Dev Startup (ms)
+### Track A — React SPA · Cold Dev Startup
 
-| Tool | Scenario | Run 1 | Run 2 | Notes |
-|------|----------|------:|------:|-------|
-| **Vite** | Cold dev | 4,916 | 63,167 | High variance — see below |
-| **Vite** | Warm dev | 6,860 | 95,348 | High variance — see below |
-| Webpack | Cold dev | — | — | Pending |
-| Webpack | Warm dev | — | — | Pending |
-| Rspack | Cold dev | — | — | Pending |
-| Rspack | Warm dev | — | — | Pending |
+| Tool | Mean (ms) | Median (ms) | Min | Max | CV |
+|------|----------:|------------:|----:|----:|----|
+| webpack | 7,487 | 6,871 | 6,231 | 9,977 | **19.9% ⚠** (n=4) |
+| vite | 11,757 | 2,243 | 2,194 | 63,167 | **178.8% ⚠** (n=7) |
+| rspack | 2,949 | 2,903 | 2,768 | 3,221 | 6.2% (n=4) |
 
-> **Variance note.** The two Vite cold-dev samples (4.9 s vs 63.2 s) show a CV well above the 15 % warning threshold. On Windows, Windows Defender real-time scanning of `node_modules` is a known contributor to outlier startup times. Results should not be ranked until at least 5 full iterations are collected with AV exclusions confirmed and a stable CV.
+> **Vite variance note.** Vite's `ready` signal fires before modules are transformed — the outlier values (up to 63 s) reflect Windows Defender scanning `node_modules` on first access. The median (2,243 ms) is the more representative figure, but these results must not be ranked directly against Webpack/Rspack compile-and-serve times.
 
-### Track A — React SPA · HMR Latency
+### Track A — React SPA · Warm Dev Startup
 
-| Tool | Median (ms) | Notes |
-|------|------------:|-------|
-| Vite | — | Playwright probe returned `null` — HMR timing not yet captured |
-| Webpack | — | Pending |
-| Rspack | — | Pending |
+| Tool | Mean (ms) | Median (ms) | Min | Max | CV |
+|------|----------:|------------:|----:|----:|----|
+| webpack | 6,817 | 6,675 | 6,050 | 7,867 | 10.1% (n=4) |
+| vite | 17,020 | 2,247 | 2,194 | 95,348 | **188.4% ⚠** (n=7) |
+| rspack | 2,989 | 2,994 | 2,763 | 3,206 | 5.3% (n=4) |
+
+### Track A — React SPA · HMR Latency (server-side)
+
+| Tool | Mean (ms) | Median (ms) | Min | Max | CV |
+|------|----------:|------------:|----:|----:|----|
+| webpack | 585 | 585 | 496 | 674 | 14.2% (n=4) |
+| vite | 55 | 55 | 44 | 66 | **20% ⚠** (n=2) |
+| rspack | 60 | 59 | 54 | 67 | 8.1% (n=4) |
+
+### Track A — React SPA · Production Build
+
+| Tool | Scenario | Mean (ms) | n |
+|------|----------|----------:|--:|
+| webpack | Cold build | 13,427 | 1 |
+| webpack | Warm build | 3,309 | 1 |
+| vite | Cold build | 2,574 | 1 |
+| vite | Warm build | 2,557 | 1 |
+| rspack | Cold build | 2,005 | 1 |
+| rspack | Warm build | 2,084 | 1 |
+
+> Build timings are single-run only — CV cannot be computed. Re-run with `pnpm bench:build:spa` to add iterations.
+
+### Track A — React SPA · Production Output Size
+
+| Tool | JS Raw | JS Gzip | JS Brotli |
+|------|-------:|--------:|----------:|
+| webpack | 231 KB | 75 KB | 64 KB |
+| vite | — | — | — |
+| rspack | 231 KB | 75 KB | 65 KB |
+
+> Vite output-size measurement returned zero — asset path glob likely needs adjustment for Vite's output layout.
 
 ### Track B — Next.js · Dev Startup
 
@@ -87,7 +116,18 @@ For Vite specifically, **server ready** and **first-page interactive** are recor
 | next-turbopack | — | — |
 | next-webpack | — | — |
 
-_Full 5-iteration runs with summary statistics (median, σ, CV) will appear here once the complete benchmark pass is finished._
+_Track B is pending. Run `pnpm bench:dev:next` to collect data._
+
+### Variance Summary (CV > 15 %)
+
+| Tool | Scenario | CV |
+|------|----------|----|
+| webpack | cold-dev | **19.9%** |
+| vite | cold-dev | **178.8%** |
+| vite | hmr | **20%** |
+| vite | warm-dev | **188.4%** |
+
+All flagged Vite variance is attributable to Windows Defender scanning on first module access. Rspack and Webpack warm-dev show stable CVs (< 11 %) with the current sample size.
 
 ---
 

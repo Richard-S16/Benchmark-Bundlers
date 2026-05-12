@@ -55,7 +55,7 @@ export const READY_MARKERS = {
   },
   hmrApplied: {
     webpack: 'compiled successfully',
-    vite: '[vite] hmr update',
+    vite: 'hmr update',
     rspack: 'compiled successfully',
     'next-turbopack': 'Fast Refresh',
     'next-webpack': 'Fast Refresh',
@@ -63,8 +63,8 @@ export const READY_MARKERS = {
 };
 
 export const TIMEOUTS = {
-  devStartup: 120_000,
-  hmr: 15_000,
+  devStartup: 300_000,
+  hmr: 30_000,
   build: 300_000,
 };
 

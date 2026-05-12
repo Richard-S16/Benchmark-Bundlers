@@ -15,6 +15,11 @@ import {
 const execAsync = promisify(exec);
 const IS_WINDOWS = os.platform() === 'win32';
 
+const ANSI_RE = /\x1B\[[0-9;?]*[A-Za-z]/g;
+function stripAnsi(str) {
+  return str.replace(ANSI_RE, '');
+}
+
 export const ROOT = path.resolve(import.meta.dirname, '../..');
 
 const TOOL_CWD = {
@@ -49,8 +54,10 @@ export function getHmrProbeFile(tool) {
 }
 
 function spawnPnpm(script, cwd) {
-  const cmd = IS_WINDOWS ? 'pnpm.cmd' : 'pnpm';
-  return spawn(cmd, ['run', script], {
+  const [cmd, args] = IS_WINDOWS
+    ? ['cmd', ['/c', 'pnpm', 'run', script]]
+    : ['pnpm', ['run', script]];
+  return spawn(cmd, args, {
     cwd,
     stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, FORCE_COLOR: '0', NO_COLOR: '1' },
@@ -94,7 +101,7 @@ export function waitForReady(proc, marker, timeout = TIMEOUTS.devStartup) {
 
     function onData(chunk) {
       if (settled) return;
-      if (chunk.toString().toLowerCase().includes(marker.toLowerCase())) {
+      if (stripAnsi(chunk.toString()).toLowerCase().includes(marker.toLowerCase())) {
         settled = true;
         clearTimeout(timer);
         proc.stdout.off('data', onData);
@@ -127,7 +134,7 @@ export function waitForMarker(proc, marker, timeout = TIMEOUTS.hmr, startedAt = 
 
     function onData(chunk) {
       if (settled) return;
-      if (chunk.toString().toLowerCase().includes(marker.toLowerCase())) {
+      if (stripAnsi(chunk.toString()).toLowerCase().includes(marker.toLowerCase())) {
         settled = true;
         clearTimeout(timer);
         proc.stdout.off('data', onData);

@@ -5,7 +5,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  # Allow manual triggers with an explicit mode choice
   workflow_dispatch:
     inputs:
       mode:
@@ -17,7 +16,6 @@ on:
           - smoke
           - full
 
-# Cancel in-flight runs on the same ref so PRs never queue up
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -25,20 +23,17 @@ concurrency:
 env:
   NODE_VERSION: '22.14.0'
   PNPM_VERSION: '9.15.0'
-  # Treat smoke as the default for push/PR triggers
   BENCH_MODE: ${{ inputs.mode || 'smoke' }}
 
 jobs:
   benchmark:
     name: Run benchmarks (${{ inputs.mode || 'smoke' }})
-    # Target Windows to match the local dev environment documented in the plan
     runs-on: windows-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # pnpm must be set up BEFORE setup-node so the cache key is correct
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -51,8 +46,6 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        # --frozen-lockfile aborts if pnpm-lock.yaml is out of date,
-        # ensuring lockfile-based reproducibility in CI.
         run: pnpm install --frozen-lockfile
 
       # ── Smoke mode (push, PR, and manual smoke) ────────────────────────────
@@ -81,14 +74,11 @@ jobs:
         if: env.BENCH_MODE == 'full'
         run: pnpm bench:build:next
 
-      # ── Artifacts ─────────────────────────────────────────────────────────
+
       - name: Upload raw results
         uses: actions/upload-artifact@v4
-        # Always upload, even if a benchmark step fails, so partial data
-        # is preserved for debugging.
         if: always()
         with:
           name: benchmark-results-${{ github.run_id }}-${{ env.BENCH_MODE }}
           path: results/
-          # Keep for 90 days; full runs are expensive to reproduce
           retention-days: 90

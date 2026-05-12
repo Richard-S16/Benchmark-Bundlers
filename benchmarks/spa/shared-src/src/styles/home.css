@@ -1,0 +1,14 @@
+.page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.asset-demo {
+  margin-top: 1.5rem;
+}

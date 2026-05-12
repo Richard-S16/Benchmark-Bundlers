@@ -147,3 +147,56 @@ Variance is reported as standard deviation and coefficient of variation (CV = σ
 - Linux or macOS CI matrix
 - Library-mode builds
 - Subjective developer-experience scoring
+
+---
+
+## Report Format
+
+Run `pnpm bench:report` after any benchmark run to generate two files in `results/summary/`:
+
+### `summary-<timestamp>.json`
+
+A structured JSON file with `schemaVersion`, `generatedAt`, `env`, and a `tracks` object. Under each track key (`spa`, `next`) the schema is:
+
+```jsonc
+{
+  "tools": ["webpack", "vite", "rspack"],
+  "scenarios": {
+    "cold-dev": {
+      "webpack": {
+        "durationMs": { "n": 5, "mean": 1234, "median": 1200, "stddev": 50, "cv": 0.04, "min": 1150, "max": 1300 },
+        "peakRssKb": { "n": 5, "mean": 512000, ... }
+      }
+    },
+    "cold-build": {
+      "webpack": {
+        "durationMs": { ... },
+        "peakRssKb": { ... },
+        "outputSize": {
+          "js": { "rawBytes": 204800, "gzipBytes": 65536, "brotliBytes": 57344 },
+          "css": { "rawBytes": 8192, "gzipBytes": 2048, "brotliBytes": 1800 },
+          "fileCount": { "js": 3, "css": 1 }
+        }
+      }
+    }
+  },
+  "highVarianceFlags": [
+    { "tool": "vite", "scenario": "cold-dev", "metric": "durationMs", "cv": 0.22 }
+  ]
+}
+```
+
+Each numeric summary has `n` (sample count), `mean`, `median`, `stddev`, `cv` (coefficient of variation), `min`, and `max`. All durations are milliseconds; all sizes are bytes.
+
+### `report-<timestamp>.md`
+
+A human-readable Markdown report with:
+
+- One section per track, with tables for each scenario
+- Duration table: mean, median, min, max, CV
+- Peak RSS table appended to each scenario block
+- Production output size table (JS + CSS, raw / gzip / brotli)
+- Non-comparable metric callouts per track
+- A variance analysis section flagging any metric where CV exceeds 15%
+
+Tracks are always reported separately. The file is self-contained and can be committed to `results/summary/` as an artifact.

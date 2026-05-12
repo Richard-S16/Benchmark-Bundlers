@@ -16,6 +16,11 @@
     "bench:all": "pnpm bench:dev:spa && pnpm bench:build:spa && pnpm bench:dev:next && pnpm bench:build:next",
     "bench:smoke": "node scripts/bench/run-dev-bench.mjs --smoke && node scripts/bench/run-build-bench.mjs --smoke",
     "bench:smoke:spa": "node scripts/bench/run-dev-bench.mjs --track spa --smoke && node scripts/bench/run-build-bench.mjs --track spa --smoke",
-    "bench:smoke:next": "node scripts/bench/run-dev-bench.mjs --track next --smoke && node scripts/bench/run-build-bench.mjs --track next --smoke"
+    "bench:smoke:next": "node scripts/bench/run-dev-bench.mjs --track next --smoke && node scripts/bench/run-build-bench.mjs --track next --smoke",
+    "bench:browser": "playwright test",
+    "bench:report": "node scripts/bench/generate-report.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
   }
 }

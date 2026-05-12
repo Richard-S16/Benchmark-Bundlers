@@ -54,9 +54,9 @@ export const READY_MARKERS = {
     'next-webpack': 'ready started server on',
   },
   hmrApplied: {
-    webpack: '[HMR] App is up to date',
+    webpack: 'compiled successfully',
     vite: '[vite] hmr update',
-    rspack: '[HMR] App is up to date',
+    rspack: 'compiled successfully',
     'next-turbopack': 'Fast Refresh',
     'next-webpack': 'Fast Refresh',
   },
